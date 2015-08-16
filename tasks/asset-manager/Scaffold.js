@@ -1,7 +1,6 @@
 ///<reference path="../../node.d.ts"/>
 ///<reference path="../../promise.d.ts"/>
 var path = require('path');
-var util = require('util');
 var fs = require('fs');
 var Promise = require('promise');
 var FileCategoryEnum_1 = require("./FileCategoryEnum");
@@ -14,8 +13,8 @@ var AssetManagerGenerator = (function () {
         this._files = files.map(function (file) {
             return path.relative(path.dirname(dest), file);
         });
-        this._enum = new AssetsEnumGenerator(this._files);
-        this._config = new AssetsConfigGenerator(this._enum);
+        //this._enum = new AssetsEnumGenerator(this._files);
+        this._config = new AssetsConfigGenerator(this._files);
     }
     AssetManagerGenerator.prototype.toJavascript = function () {
         return new Promise(function (resolve) {
@@ -42,12 +41,11 @@ var AssetsEnumGenerator = (function () {
         this.tree = this.normalizeStructure(this.tree);
         this.flatten = this.flattenStructure('', {}, this.tree);
         //console.log(this.tree);
-        console.log(util.inspect(this.flatten, false, null));
+        //console.log(util.inspect(this.flatten, false, null));
         //console.log(this.flatten);
     }
     AssetsEnumGenerator.prototype.normalizeStructure = function (structure) {
         var keys = Object.keys(structure);
-        console.log(keys);
         if (keys.length == 1) {
             return this.normalizeStructure(structure[keys[0]]);
         }
@@ -65,8 +63,9 @@ var AssetsEnumGenerator = (function () {
                     baseObject[baseKey + seperator + key + seperator + name] = value;
                 }
                 else if (value instanceof Array) {
-                    var allStr = value.every(function (item) { return typeof item == 'string'; });
-                    console.log('allStr', allStr);
+                    var allStrings = value.every(function (item) { return typeof item == 'string'; });
+                    if (allStrings) {
+                    }
                 }
                 else {
                     this.flattenStructure((baseKey.length > 0 ? baseKey + seperator : baseKey) + key, baseObject, value);
@@ -84,8 +83,68 @@ var AssetsEnumGenerator = (function () {
     return AssetsEnumGenerator;
 })();
 var AssetsConfigGenerator = (function () {
-    function AssetsConfigGenerator(assetEnum) {
+    function AssetsConfigGenerator(files) {
+        this.tree = {};
+        this.flatten = {};
+        this.sound = {};
+        this.image = {};
+        this.video = {};
+        this.unknown = {};
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            this.tree = this.filepathToObject(this.tree, path.dirname(file), file, path.sep);
+        }
+        this.tree = this.normalizeStructure(this.tree);
+        this.flatten = this.flattenStructure('', this.flatten, this.tree);
+        console.log(this.flatten);
     }
+    AssetsConfigGenerator.prototype.filepathToObject = function (obj, id, value, seperator) {
+        //console.log(arguments);
+        var seperator = seperator || path.sep;
+        var value = value || '';
+        var idList = id.split(seperator);
+        if (idList.length == 1) {
+            if (!obj[idList[0]]) {
+                obj[idList[0]] = [];
+            }
+            obj[idList[0]].push(value);
+        }
+        else {
+            var key = idList.shift();
+            obj[key] = this.filepathToObject(obj[key] || {}, idList.join(seperator), value, seperator);
+        }
+        return obj;
+    };
+    AssetsConfigGenerator.prototype.normalizeStructure = function (structure) {
+        var keys = Object.keys(structure);
+        if (keys.length == 1) {
+            return this.normalizeStructure(structure[keys[0]]);
+        }
+        else {
+            return structure;
+        }
+    };
+    AssetsConfigGenerator.prototype.flattenStructure = function (baseKey, baseObject, structure, seperator) {
+        if (seperator === void 0) { seperator = '_'; }
+        for (var key in structure) {
+            var value = structure[key];
+            if (value) {
+                if (typeof value == 'string') {
+                    var name = path.parse(value).name.replace(/-/, '');
+                    baseObject[baseKey + seperator + key + seperator + name] = value;
+                }
+                else if (value instanceof Array) {
+                    var allStrings = value.every(function (item) { return typeof item == 'string'; });
+                    if (allStrings) {
+                    }
+                }
+                else {
+                    this.flattenStructure((baseKey.length > 0 ? baseKey + seperator : baseKey) + key, baseObject, value);
+                }
+            }
+        }
+        return baseObject;
+    };
     AssetsConfigGenerator.prototype.toJavascript = function () {
         return '';
     };
@@ -123,21 +182,4 @@ function fileCategory(filepath) {
                 return FileCategoryEnum_1.default.UNKNOWN;
             }
     }
-}
-function filepathToObject(obj, id, value, seperator) {
-    //console.log(arguments);
-    var seperator = seperator || path.sep;
-    var value = value || '';
-    var idList = id.split(seperator);
-    if (idList.length == 1) {
-        if (!obj[idList[0]]) {
-            obj[idList[0]] = [];
-        }
-        obj[idList[0]].push(value);
-    }
-    else {
-        var key = idList.shift();
-        obj[key] = filepathToObject(obj[key] || {}, idList.join(seperator), value, seperator);
-    }
-    return obj;
 }
