@@ -1,0 +1,32 @@
+{
+  "name": "grunt-asset-manager",
+  "version": "1.0.0",
+  "description": "Grunt task for generating javascript or typescript config files for easy managing project assets for front end projects.",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mientjan/grunt-asset-manager"
+  },
+  "keywords": [
+    "gruntplugin",
+    "assets",
+    "manager",
+    "asset-manager"
+  ],
+  "author": "Mient-jan Stelling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mientjan/grunt-asset-manager/issues"
+  },
+  "homepage": "https://github.com/mientjan/grunt-asset-manager",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13"
+  },
+  "dependencies": {
+    "promise": "^7.0.4"
+  }
+}
