@@ -1,19 +1,16 @@
-///<reference path="../../node.d.ts"/>
-///<reference path="../../promise.d.ts"/>
+"use strict";
 var path = require('path');
 var fs = require('fs');
 var Promise = require('promise');
-var FileCategoryEnum_1 = require("./FileCategoryEnum");
+var FileCategoryEnum_1 = require("./../enum/FileCategoryEnum");
 var AssetManagerGenerator = (function () {
     function AssetManagerGenerator(files, dest) {
         this._files = [];
         this._enum = null;
         this._config = null;
-        // make file paths relative to dest
         this._files = files.map(function (file) {
             return path.relative(path.dirname(dest), file);
         });
-        //this._enum = new AssetsEnumGenerator(this._files);
         this._config = new AssetsConfigGenerator(this._files);
     }
     AssetManagerGenerator.prototype.toJavascript = function () {
@@ -40,9 +37,6 @@ var AssetsEnumGenerator = (function () {
         }
         this.tree = this.normalizeStructure(this.tree);
         this.flatten = this.flattenStructure('', {}, this.tree);
-        //console.log(this.tree);
-        //console.log(util.inspect(this.flatten, false, null));
-        //console.log(this.flatten);
     }
     AssetsEnumGenerator.prototype.normalizeStructure = function (structure) {
         var keys = Object.keys(structure);
@@ -99,7 +93,6 @@ var AssetsConfigGenerator = (function () {
         console.log(this.flatten);
     }
     AssetsConfigGenerator.prototype.filepathToObject = function (obj, id, value, seperator) {
-        //console.log(arguments);
         var seperator = seperator || path.sep;
         var value = value || '';
         var idList = id.split(seperator);

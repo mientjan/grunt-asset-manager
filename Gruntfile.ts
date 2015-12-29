@@ -13,7 +13,7 @@ function Gruntfile(grunt)
 		}
 
 	});
-	grunt.loadTasks('tasks');
+	grunt.loadTasks('./src/tasks');
 	grunt.registerTask('test', [
 		'asset-manager'
 	]);

@@ -1,3 +1,4 @@
+"use strict";
 var ManagerTypeEnum;
 (function (ManagerTypeEnum) {
     ManagerTypeEnum[ManagerTypeEnum["TYPESCRIPT"] = 0] = "TYPESCRIPT";

@@ -1,13 +1,13 @@
-///<reference path="../../node.d.ts"/>
-///<reference path="../../promise.d.ts"/>
+///<reference path="../../../node.d.ts"/>
+///<reference path="../../../promise.d.ts"/>
 
 
 import path = require('path');
-import util = require('util');
+import util = require('../util/Util');
 import fs = require('fs');
 import Promise = require('promise');
 
-import FileCategoryEnum from "./FileCategoryEnum"
+import FileCategoryEnum from "./../enum/FileCategoryEnum"
 
 class AssetManagerGenerator
 {
@@ -21,7 +21,7 @@ class AssetManagerGenerator
 		this._files = files.map((file) => {
 			return path.relative(path.dirname(dest), file);
 		});
-		
+
 
 		//this._enum = new AssetsEnumGenerator(this._files);
 		this._config = new AssetsConfigGenerator(this._files);

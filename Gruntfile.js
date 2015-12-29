@@ -1,3 +1,4 @@
+"use strict";
 function Gruntfile(grunt) {
     grunt.initConfig({
         'asset-manager': {
@@ -9,7 +10,7 @@ function Gruntfile(grunt) {
             }
         }
     });
-    grunt.loadTasks('tasks');
+    grunt.loadTasks('./src/tasks');
     grunt.registerTask('test', [
         'asset-manager'
     ]);
