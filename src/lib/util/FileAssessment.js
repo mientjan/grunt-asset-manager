@@ -5,6 +5,9 @@ var path = require('path');
 var FileAssessment = (function () {
     function FileAssessment() {
     }
+    FileAssessment.prototype.getFileCategoryString = function (type) {
+        return FileCategoryType_1.default[type];
+    };
     FileAssessment.getFileCategoryFromPath = function (filepath) {
         var extension = path.extname(filepath).substr(1);
         switch (extension) {
@@ -37,7 +40,6 @@ var FileAssessment = (function () {
     };
     FileAssessment.getFilesizeInBytes = function (filepath) {
         var stats = fs.statSync(filepath);
-        console.log(stats);
         var fileSizeInBytes = stats["size"];
         return fileSizeInBytes;
     };

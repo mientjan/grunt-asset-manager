@@ -1,6 +1,7 @@
 "use strict";
 var ManagerType_1 = require("../lib/enum/ManagerType");
-var Manifest_1 = require("../lib/util/Manifest");
+var ManifestCollection_1 = require("../lib/util/ManifestCollection");
+var Tools_1 = require("../lib/util/Tools");
 function Grunt(grunt) {
     var options;
     grunt.registerMultiTask('asset-manager', '-', function () {
@@ -12,8 +13,8 @@ function Grunt(grunt) {
         for (var i = 0; i < this.files.length; i++) {
             var src = this.files[i].src;
             var dest = this.files[i].dest;
-            var manifest = new Manifest_1.default(src, dest);
-            console.log(manifest.tree);
+            var manifest = new ManifestCollection_1.default(src, dest);
+            Tools_1.log(manifest.tree);
         }
     });
 }

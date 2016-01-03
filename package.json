@@ -27,6 +27,9 @@
     "grunt-cli": "^0.1.13"
   },
   "dependencies": {
+    "forever": "0.15.1",
+    "grunt-ts": "5.2.0",
+    "node-supervisor": "1.0.2",
     "promise": "^7.0.4"
   }
 }

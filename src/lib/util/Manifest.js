@@ -1,46 +1,33 @@
 "use strict";
-var path = require('path');
 var FileCategoryType_1 = require("../enum/FileCategoryType");
-var FileAssessment_1 = require("../util/FileAssessment");
+var path = require("path");
 var Manifest = (function () {
-    function Manifest(files, dest) {
-        var _this = this;
-        this.tree = {};
-        this.filesRelative = files.map(function (file) { return path.relative(path.dirname(dest), file); });
-        this.files = files.map(function (file) {
-            return {
-                src: file,
-                type: FileCategoryType_1.default[FileAssessment_1.default.getFileCategoryFromPath(file)].toLowerCase(),
-                typen: FileAssessment_1.default.getFileCategoryFromPath(file),
-                bytesize: FileAssessment_1.default.getFilesizeInBytes(file)
-            };
-        });
-        this.files.forEach(function (file) { return _this.manifestToObjectTree(_this.tree, path.dirname(file.src), file); });
+    function Manifest(src, type, size) {
+        this.src = src;
+        this.type = type;
+        this.size = size;
     }
-    Manifest.prototype.manifestToObjectTree = function (obj, id, value, seperator) {
-        if (seperator === void 0) { seperator = path.sep; }
-        var idList = id.split(seperator);
-        if (idList.length == 1) {
-            if (!obj[idList[0]]) {
-                obj[idList[0]] = [];
-            }
-            obj[idList[0]].push(value);
-        }
-        else {
-            var key = idList.shift();
-            obj[key] = this.manifestToObjectTree(obj[key], idList.join(seperator), value, seperator);
-        }
-        return obj;
+    Manifest.prototype.getTypeString = function () {
+        return FileCategoryType_1.default[this.type].toLowerCase();
     };
-    Manifest.prototype.toList = function () {
-        return this.files.map(function (file) {
-            return {
-                src: file,
-                type: FileCategoryType_1.default[FileAssessment_1.default.getFileCategoryFromPath(file)].toLowerCase(),
-                typen: FileAssessment_1.default.getFileCategoryFromPath(file),
-                bytesize: FileAssessment_1.default.getFilesizeInBytes(file)
-            };
-        });
+    Manifest.prototype.getTree = function (tree, id) {
+        if (tree === void 0) { tree = {}; }
+        if (id === void 0) { id = path.dirname(this.src).split(path.sep); }
+        var key;
+        if (id.length > 1) {
+            key = id.shift();
+            if (!tree[key]) {
+                tree[key] = {};
+            }
+            this.getTree(tree[key], id);
+        }
+        else if (id.length == 1) {
+            key = id[0];
+            if (!tree[key]) {
+                tree[key] = [];
+            }
+            tree[key].push(this);
+        }
     };
     return Manifest;
 })();

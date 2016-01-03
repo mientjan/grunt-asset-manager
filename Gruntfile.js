@@ -8,8 +8,17 @@ function Gruntfile(grunt) {
                 },
                 options: {}
             }
+        },
+        ts: {
+            default: {
+                options: {
+                    module: 'commonjs'
+                },
+                src: ["src/**/*.ts", "!node_modules/**/*.ts"],
+            }
         }
     });
+    grunt.loadNpmTasks("grunt-ts");
     grunt.loadTasks('./src/tasks');
     grunt.registerTask('test', [
         'asset-manager'

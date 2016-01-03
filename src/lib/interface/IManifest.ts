@@ -1,8 +1,8 @@
+import FileCategoryType from "../enum/FileCategoryType";
+
 interface IManifest {
 	src:string;
-	type:string;
-	typen:number;
-	bytesize:number
+	type:FileCategoryType;
+	size:number;
 }
-
 export default IManifest;

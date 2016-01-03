@@ -3,12 +3,10 @@
 
 
 import path = require('path');
-import util = require('../util/Util');
 import fs = require('fs');
 import Promise = require('promise');
 
-import FileCategoryEnum from "./../enum/FileCategoryEnum"
-
+/*
 class AssetManagerGenerator
 {
 	protected _files:Array<string> = [];
@@ -264,4 +262,4 @@ function fileCategory(filepath:string):FileCategoryEnum
 
 
 
-export {AssetManagerGenerator}
+export {AssetManagerGenerator}*/

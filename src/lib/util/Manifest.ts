@@ -1,68 +1,50 @@
 ///<reference path="../../../node.d.ts"/>
 ///<reference path="../../../promise.d.ts"/>
 
-
-//import util = require('assetmanager/Util');
-//import fs = require('fs');
-//import Promise = require('promise');
-import path = require('path');
-import FileCategory from "../enum/FileCategoryType";
-import FileAssessment from "../util/FileAssessment"
-import IHashMap from "../interface/IHashMap";
 import IManifest from "../interface/IManifest";
+import FileCategoryType from "../enum/FileCategoryType";
+import path = require("path");
 
-class Manifest
+class Manifest implements IManifest
 {
-	files:Array<IHashMap>;
-	tree:IHashMap<any> = {};
-	filesRelative:Array<string>;
+	src:string;
+	type:FileCategoryType;
+	size:number;
 
-	constructor(files:Array<string>, dest:string)
-	{
-		this.filesRelative = files.map(file => path.relative(path.dirname(dest), file) );
-		this.files = files.map(file => {
-			return {
-				src:file,
-				type:FileCategory[FileAssessment.getFileCategoryFromPath(file)].toLowerCase(),
-				typen:FileAssessment.getFileCategoryFromPath(file),
-				bytesize:FileAssessment.getFilesizeInBytes(file)
-			}
-		})
-
-		this.files.forEach(file => this.manifestToObjectTree(this.tree, path.dirname(file.src), file));
+	constructor(src:string, type:FileCategoryType, size:number){
+		this.src = src;
+		this.type = type;
+		this.size = size;
 	}
 
-	protected manifestToObjectTree(obj:IHashMap<IHashMap<IManifest>|IManifest>, id:string, value:IManifest, seperator:string = path.sep)
+	public getTypeString():string
 	{
-		var idList = id.split(seperator);
-		if( idList.length == 1)
-		{
-			if(!obj[idList[0]]){
-				obj[idList[0]] = [];
+		return FileCategoryType[this.type].toLowerCase();
+	}
+
+	public getTree(tree:any = {}, id:Array<string> = path.dirname(this.src).split(path.sep))
+	{
+		var key:string;
+		if(id.length > 1){
+			key = id.shift();
+
+			if(!tree[key])
+			{
+				tree[key] = {};
 			}
 
-			obj[idList[0]].push(value);
-		} else {
-			var key = idList.shift();
-			obj[key] = this.manifestToObjectTree(obj[key], idList.join(seperator), value, seperator);
+			this.getTree(tree[key], id);
 		}
+		else if(id.length == 1){
+			key = id[0];
 
-		return obj;
-	}
-
-	toList():Array<any>
-	{
-		return this.files.map(file => {
-			return {
-				src:file,
-				type:FileCategory[FileAssessment.getFileCategoryFromPath(file)].toLowerCase(),
-				typen:FileAssessment.getFileCategoryFromPath(file),
-				bytesize:FileAssessment.getFilesizeInBytes(file)
+			if(!tree[key]){
+				tree[key] = [];
 			}
-		})
+
+			tree[key].push(this);
+		}
 	}
-
-
 }
 
 export default Manifest;

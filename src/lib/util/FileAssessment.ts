@@ -6,6 +6,11 @@ import path = require('path');
 
 class FileAssessment
 {
+	public getFileCategoryString(type:FileCategoryType):string
+	{
+		return FileCategoryType[type];
+	}
+
 	public static getFileCategoryFromPath(filepath:string):FileCategoryType
 	{
 		var extension = path.extname(filepath).substr(1);
@@ -47,7 +52,6 @@ class FileAssessment
 	public static getFilesizeInBytes(filepath:string):number
 	{
 		var stats = fs.statSync(filepath);
-		console.log(stats);
 		var fileSizeInBytes = stats["size"]
 		return fileSizeInBytes
 	}
