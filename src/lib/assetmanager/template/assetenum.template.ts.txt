@@ -1,6 +1,0 @@
-enum AssetEnum
-{
-	{replace}
-}
-
-export default AssetEnum;
