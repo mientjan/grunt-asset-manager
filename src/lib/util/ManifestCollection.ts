@@ -44,6 +44,65 @@ class ManifestCollection
 		return <Array<IManifest>> this.files.filter(file => FileAssessment.getFileCategoryFromPath(file.src) == type);
 	}
 
+	public getStartBaseRoot(tree = this.toObjectTree())
+	{
+		var keys = Object.keys(tree);
+		var result = [];
+
+		if(keys.length == 1)
+		{
+			result.push(keys[0]);
+			result = result.concat(this.getStartBaseRoot(tree[keys[0]]));
+		}
+
+		return result;
+	}
+
+	public getSortedByDirectory():IHashMap<Array<number>>
+	{
+		var baseRoot = this.getStartBaseRoot().join(path.sep);
+
+		var all = [];
+		var dirs:IHashMap<Array<number>> = {};
+		this.files.forEach((man, index) => {
+			var pathList = path.dirname(man.src).replace(baseRoot, '').split(path.sep)
+				.filter(value => value != '');
+
+			var prev = '';
+			pathList = pathList.map( value => prev = prev ? prev + '_' + value : value );
+			pathList.forEach( value => {
+				if(dirs[value] === void 0){
+					dirs[value] = [];
+				}
+				dirs[value].push(index);
+
+				if(all.indexOf(index) == -1) {
+         all.push(index);
+      	}
+			})
+		});
+
+		dirs['all'] = all;
+
+		return dirs;
+	}
+
+	public getSortedByType():IHashMap<Array<number>>
+	{
+		var dirs:IHashMap<Array<number>> = {};
+		this.files.forEach((man, index) => {
+			var type = FileAssessment.getFileCategoryFromPath(man.src);
+			var typeString = FileAssessment.getFileCategoryString(type);
+
+			if(!dirs[typeString]){
+				dirs[typeString] = [];
+			}
+
+			dirs[typeString].push(index);
+		});
+		return dirs;
+	}
+
 /*
 	protected manifestToObjectTree(obj:IHashMap<IHashMap<IManifest>|IManifest>, id:string, value:IManifest, seperator:string = path.sep)
 	{

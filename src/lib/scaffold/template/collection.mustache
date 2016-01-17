@@ -1,0 +1,42 @@
+
+export enum FileCategoryType
+{
+	UNKNOWN = 1 << 0,
+	AUDIO = 1 << 1,
+	BITMAP = 1 << 2,
+	BITMAP_JPG = 1 << 2 | 1 << 3,
+	BITMAP_PNG = 1 << 2 | 1 << 4,
+	BITMAP_GIF = 1 << 2 | 1 << 5,
+	VIDEO = 1 << 6,
+	JSON = 1 << 7,
+	JSON_MANIFEST = 1 << 7 | 1 << 8
+}
+
+export interface IManifest {
+  src:string;
+	type:FileCategoryType;
+	size:number;
+}
+
+export enum {{enumName}}
+{
+  // all
+  ALL = 1;
+
+  // by types
+  {{#type}}
+  {{name}} = {{index}};
+  {{/type}}
+
+  // By directory
+  {{#directory}}
+  {{name}} = {{index}};
+  {{/directory}}
+}
+
+export class {{name}}<{{enumName}}>
+{
+  protected _dataSize:Array<number> = {{sizeList}};
+  protected _dataDir:Array<string> = {{dirList}};
+  protected _dataType:Array<FileCategoryType> = {{typeList}};
+}

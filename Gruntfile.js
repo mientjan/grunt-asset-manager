@@ -20,7 +20,7 @@ function Gruntfile(grunt) {
     });
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadTasks('./src/tasks');
-    grunt.registerTask('test', [
+    grunt.registerTask('default', [
         'asset-manager'
     ]);
 }

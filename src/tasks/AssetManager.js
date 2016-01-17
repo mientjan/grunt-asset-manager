@@ -14,7 +14,8 @@ function Grunt(grunt) {
             var src = this.files[i].src;
             var dest = this.files[i].dest;
             var manifest = new ManifestCollection_1.default(src, dest);
-            Tools_1.log(manifest.tree);
+            Tools_1.log(manifest.getSortedByDirectory());
+            Tools_1.log(manifest.getSortedByType());
         }
     });
 }

@@ -29,6 +29,7 @@
   "dependencies": {
     "forever": "0.15.1",
     "grunt-ts": "5.2.0",
+    "mustache": "^2.2.1",
     "node-supervisor": "1.0.2",
     "promise": "^7.0.4"
   }

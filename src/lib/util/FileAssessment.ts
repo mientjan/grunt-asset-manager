@@ -6,7 +6,7 @@ import path = require('path');
 
 class FileAssessment
 {
-	public getFileCategoryString(type:FileCategoryType):string
+	public static getFileCategoryString(type:FileCategoryType):string
 	{
 		return FileCategoryType[type];
 	}

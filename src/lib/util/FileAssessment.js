@@ -5,7 +5,7 @@ var path = require('path');
 var FileAssessment = (function () {
     function FileAssessment() {
     }
-    FileAssessment.prototype.getFileCategoryString = function (type) {
+    FileAssessment.getFileCategoryString = function (type) {
         return FileCategoryType_1.default[type];
     };
     FileAssessment.getFileCategoryFromPath = function (filepath) {
@@ -44,6 +44,6 @@ var FileAssessment = (function () {
         return fileSizeInBytes;
     };
     return FileAssessment;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = FileAssessment;

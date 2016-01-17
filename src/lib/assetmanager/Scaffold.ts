@@ -4,7 +4,7 @@
 
 import path = require('path');
 import fs = require('fs');
-import Promise = require('promise');
+import Promise = require('promise'); 
 
 /*
 class AssetManagerGenerator

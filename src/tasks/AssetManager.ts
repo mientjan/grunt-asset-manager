@@ -1,4 +1,5 @@
 ///<reference path="../../node.d.ts"/>
+/// <reference path="../../mustache.d.ts"/>
 
 import path = require("path");
 import fs = require("fs");
@@ -27,7 +28,8 @@ function Grunt(grunt:any)
 			var src:Array<string> = this.files[i].src;
 			var dest:string = this.files[i].dest;
 			var manifest = new ManifestCollection(src, dest);
-			log(manifest.tree);
+			log(manifest.getSortedByDirectory());
+			log(manifest.getSortedByType());
 
 		}
 
